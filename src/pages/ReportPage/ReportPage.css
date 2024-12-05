@@ -1,0 +1,105 @@
+.react-datepicker {
+    display: inline-block;
+    width: auto;
+    background: white;
+    border: 1px solid #dcdcdc;
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.react-datepicker__day {
+    text-align: center;
+    width: 2.5rem !important;
+    height: 2.5rem !important;
+    line-height: 2.5rem;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 0.25rem;
+    transform: rotate(-90deg) scaleX(-1);
+}
+
+.react-datepicker__month {
+    display: grid !important;
+    grid-template-columns: repeat(7, 2.5rem);
+    grid-gap: 0.2rem;
+    justify-content: space-between;
+    grid-auto-flow: row;
+    transform: rotate(-90deg) scaleX(-1);
+}
+
+
+.react-datepicker__day-names {
+    display: grid !important;
+    grid-template-columns: repeat(7, 2.5rem);
+    gap: 0.2rem;
+    justify-content: center;
+    text-align: center;
+    font-weight: bold;
+    font-size: 0.85rem;
+    margin-bottom: 20px;
+}
+
+
+.react-datepicker__day--disabled {
+    color: #ccc;
+    cursor: not-allowed;
+}
+
+.react-datepicker__day--in-range {
+    background: #e6e6e6;
+    color: black;
+    border-radius: 50%;
+}
+
+.react-datepicker__day--range-start,
+.react-datepicker__day--range-end {
+    background: gray;
+    color: white;
+    font-weight: bold;
+    border-radius: 50%;
+}
+
+.react-datepicker__day--today {
+    border: 1px solid #007bff;
+    border-radius: 50%;
+    background: #007bff;
+    color: white;
+}
+
+.react-datepicker__current-month {
+    text-align: center;
+    font-size: 1rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.react-datepicker__aria-live {
+    display: none;
+}
+
+.react-datepicker__navigation {
+    display: inline-flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 50%;
+    padding: 10px;
+    cursor: pointer;
+    height: 2.5rem;
+    color: #73748c;
+}
+
+.react-datepicker__navigation button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 1.5rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    color: #cccccc;
+}
+

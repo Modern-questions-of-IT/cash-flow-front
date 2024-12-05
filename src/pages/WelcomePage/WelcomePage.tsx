@@ -1,5 +1,6 @@
 import {BlueButton} from '../../components/BlueButton/BlueButton.tsx';
 import {useEffect, useState} from 'react';
+import {Link} from "react-router-dom";
 
 interface DataType {
     name: string;
@@ -31,6 +32,8 @@ export const WelcomePage = () => {
         if (data.name === '' || data.email === '' || data.password === '' || !agree) {
             setError('Заполните, пожалуйста, все поля')
         }
+
+
     }
 
     useEffect(() => {
@@ -80,6 +83,8 @@ export const WelcomePage = () => {
                     </label>
                     <div className={'absolute bottom-12'}>{error}</div>
                     <BlueButton text={'Регистрация'} classname={'mt-3 h-10 w-1/2'} onClick={handleSubmit}/>
+
+                    <div>Уже есть аккаунт? <Link to={"/login"} className={"text-blue-400"}>Вход</Link></div>
                 </form>
             </div>
         </div>

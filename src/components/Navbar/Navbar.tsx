@@ -13,13 +13,13 @@ export const Navbar = (user: any) => {
                 <div>
                     {user ?
                         <div className={'flex gap-5'}>
-                            <Link to={'#'} className={'self-center text-sm'}>
-                                Отчеты
+                            <Link to={'/report'} className={'self-center text-sm'}>
+                                Отчет
                             </Link>
-                            <Link to={'#'} className={'self-center text-sm'}>
-                                Налоги
-                            </Link>
-                            <Link to={'#'} className={'rounded-full bg-gray-300 h-7 w-7 flex justify-center items-center ml-5'}>
+                            {/*<Link to={'#'} className={'self-center text-sm'}>*/}
+                            {/*    Налоги*/}
+                            {/*</Link>*/}
+                            <Link to={'/profile_settings'} className={'rounded-full bg-gray-300 h-7 w-7 flex justify-center items-center ml-5'}>
                                 <img src={'./settings.svg'} alt={'logo'} className={'h-5'}/>
                             </Link>
                         </div>

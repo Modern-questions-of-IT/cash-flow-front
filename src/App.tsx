@@ -11,6 +11,8 @@ import {NewCategory} from "./pages/NewCategory/NewCategory.tsx";
 import {ProfileSettings} from "./pages/ProfileSettings/ProfileSettings.tsx";
 import {GeneralOverview} from "./pages/GeneralOverview/GeneralOverview.tsx";
 import {useEffect, useState} from "react";
+import {RegularTransactions} from "./pages/RegularTransactions/RegularTransactions.tsx";
+import {Transactions} from "./pages/Transactions/Transactions.tsx";
 
 function App() {
 
@@ -47,8 +49,10 @@ function App() {
                 <Route path={'/login'} element={<LoginPage />}/>
                 <Route path={'/new_payment'} element={<NewPayment user={user}/>}/>
                 <Route path={'/new_category'} element={<NewCategory user={user} />}/>
-                <Route path={'/profile_settings'} element={<ProfileSettings />}/>
+                <Route path={'/profile_settings'} element={<ProfileSettings user={user}/>}/>
                 <Route path={'/general_overview'} element={<GeneralOverview user={user}/>}/>
+                <Route path={'/regular/:type'} element={<RegularTransactions user={user}/>}/>
+                <Route path={'/transactions/:type'} element={<Transactions user={user}/>}/>
                 <Route path={'/report'} element={<ReportPage user={user} />}/>
             </Routes>
         </div>

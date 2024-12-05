@@ -10,12 +10,13 @@ interface DataType {
     password: string
 }
 
-export const ProfileSettings = () => {
+export const ProfileSettings = (user) => {
+    console.log(user)
     const navigate = useNavigate()
 
     const [data, setData] = useState<DataType>({
-        username: '',
-        name: '',
+        username: user.user.email,
+        name: user.user.name,
         password: ''
     })
     const [error, setError] = useState<string>('')

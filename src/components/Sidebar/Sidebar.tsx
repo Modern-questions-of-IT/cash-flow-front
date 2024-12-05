@@ -3,10 +3,10 @@ import {BlueButton} from '../BlueButton/BlueButton.tsx';
 
 const items = [
     {id: 1, title: 'Общий обзор', img: './summary.svg', link: '/general_overview'},
-    {id: 2, title: 'Доходы', img: './payments.svg', link: '#'},
-    {id: 3, title: 'Регулярные доходы', img: './replay.svg', link: '#'},
-    {id: 4, title: 'Платежи', img: './payments.svg', link: '#'},
-    {id: 5, title: 'Регулярные платежи', img: './replay.svg', link: '#'},
+    {id: 2, title: 'Доходы', img: './payments.svg', link: '/transactions/income'},
+    {id: 3, title: 'Регулярные доходы', img: './replay.svg', link: '/regular/income'},
+    {id: 4, title: 'Платежи', img: './payments.svg', link: '/transactions/outcome'},
+    {id: 5, title: 'Регулярные платежи', img: './replay.svg', link: '/regular/outcome'},
 ]
 
 export const Sidebar = () => {

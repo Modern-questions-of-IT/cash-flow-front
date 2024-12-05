@@ -25,7 +25,7 @@ const periods = [
     }
 ]
 
-export const GeneralOverview = (user: any) => {
+export const Transactions = (user: any) => {
     const [data, setData] = useState<DataType[]>([])
     const [selectedPeriod, setSelectedPeriod] = useState(null);
     const [fromDate, setFromDate] = useState<Date | null>(null);

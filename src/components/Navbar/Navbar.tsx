@@ -14,7 +14,7 @@ export const Navbar = (user: any) => {
                     <h3 className={'text-center self-center text-lg'} onClick={() => navigate('/transactions/all')}>Cash Flow</h3>
                 </div>
                 <div>
-                    {user ?
+                    {user?.user?.id &&
                         <div className={'flex gap-5'}>
                             {/*<Link to={'/report'} className={'self-center text-sm'}>*/}
                             {/*    Отчет*/}
@@ -26,8 +26,6 @@ export const Navbar = (user: any) => {
                                 <img src={settings} alt={'logo'} className={'h-5'}/>
                             </Link>
                         </div>
-                        :
-                        <BlueButton text={'Вход'} classname={'w-20 h-8'}/>
                     }
                 </div>
             </div>

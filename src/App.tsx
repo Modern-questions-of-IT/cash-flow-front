@@ -1,4 +1,4 @@
-import {Route, Routes} from 'react-router-dom';
+import {Navigate, Route, Routes} from 'react-router-dom';
 
 import './App.css'
 import {Navbar} from './components/Navbar/Navbar.tsx';
@@ -55,15 +55,15 @@ function App() {
         <div className={'flex justify-between max-w-screen-xl mx-auto'}>
             {user && <Sidebar />}
             <Routes>
+                <Route path={"/"} element={ <Navigate to={'/transactions/all'}/> }/>
                 <Route path={'/registration'} element={<WelcomePage />}/>
                 <Route path={'/login'} element={<LoginPage />}/>
-                <Route path={'/new_payment'} element={<NewPayment user={user}/>}/>
-                <Route path={'/new_category'} element={<NewCategory user={user} />}/>
-                <Route path={'/profile_settings'} element={<ProfileSettings user={user}/>}/>
-                {/*<Route path={'/general_overview'} element={<GeneralOverview user={user}/>}/>*/}
-                <Route path={'/regular/:type'} element={<RegularTransactions user={user}/>}/>
-                <Route path={'/transactions/:type'} element={<Transactions user={user}/>}/>
-                {/*<Route path={'/report'} element={<ReportPage user={user} />}/>*/}
+                <Route path={'/login'} element={user ? <Navigate to={'/transactions/all'}/> : <LoginPage/>} />
+                <Route path={'/new_payment'} element={user ? <NewPayment user={user}/> : <Navigate to="/login" />} />
+                <Route path={'/new_category'} element={user ? <NewCategory user={user}/> : <Navigate to="/login" />} />
+                <Route path={'/profile_settings'} element={user ? <ProfileSettings user={user}/> : <Navigate to="/login" />} />
+                <Route path={'/regular/:type'} element={user ? <RegularTransactions user={user}/> : <Navigate to="/login" />} />
+                <Route path={'/transactions/:type'} element={user ? <Transactions user={user}/> : <Navigate to="/login" />} />
             </Routes>
         </div>
     </>

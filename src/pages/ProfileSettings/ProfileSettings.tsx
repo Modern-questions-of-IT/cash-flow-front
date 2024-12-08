@@ -1,8 +1,11 @@
 import {BlueButton} from '../../components/BlueButton/BlueButton.tsx';
 import {useEffect, useState} from 'react';
+import {useNavigate} from "react-router-dom";
 
 export const ProfileSettings = (user: any) => {
     console.log(user)
+
+    const navigate = useNavigate()
 
     const [email, _] = useState<string>(user.user.email)
     const [error, setError] = useState<string>('')
@@ -136,6 +139,8 @@ export const ProfileSettings = (user: any) => {
                 <div className={'h-3'}>{error}</div>
                 <BlueButton text={'Изменить пароль'} classname={'w-96 h-12'} onClick={handleSubmitPassword}/>
             </form>
+
+            <BlueButton text={"Выйти из аккаунта"} classname={'w-96 h-12'} onClick={() => {localStorage.removeItem("authTokenCashFlow"); navigate('/login'); window.location.reload()}}/>
         </div>
     )
 }

@@ -3,6 +3,7 @@ import {useEffect, useState} from 'react';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import {useParams} from "react-router-dom";
+import "./Transactions.css"
 interface DataType {
     createdAt: string;
     categoryName: string;

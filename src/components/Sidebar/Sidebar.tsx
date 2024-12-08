@@ -1,12 +1,15 @@
 import {Link, useNavigate} from 'react-router-dom';
 import {BlueButton} from '../BlueButton/BlueButton.tsx';
+import summary from '../../assets/summary.svg'
+import payments from '../../assets/payments.svg'
+import replay from '../../assets/replay.svg'
 
 const items = [
-    {id: 1, title: 'Общий обзор', img: './summary.svg', link: '/transactions/all'},
-    {id: 2, title: 'Доходы', img: './payments.svg', link: '/transactions/income'},
-    {id: 3, title: 'Регулярные доходы', img: './replay.svg', link: '/regular/income'},
-    {id: 4, title: 'Расходы', img: './payments.svg', link: '/transactions/expense'},
-    {id: 5, title: 'Регулярные расходы', img: './replay.svg', link: '/regular/expense'},
+    {id: 1, title: 'Общий обзор', img: summary, link: '/transactions/all'},
+    {id: 2, title: 'Доходы', img: payments, link: '/transactions/income'},
+    {id: 3, title: 'Регулярные доходы', img: replay, link: '/regular/income'},
+    {id: 4, title: 'Расходы', img: payments, link: '/transactions/expense'},
+    {id: 5, title: 'Регулярные расходы', img: replay, link: '/regular/expense'},
 ]
 
 export const Sidebar = () => {

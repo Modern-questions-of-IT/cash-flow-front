@@ -13,9 +13,9 @@ export const Navbar = (user: any) => {
                 <div>
                     {user ?
                         <div className={'flex gap-5'}>
-                            <Link to={'/report'} className={'self-center text-sm'}>
-                                Отчет
-                            </Link>
+                            {/*<Link to={'/report'} className={'self-center text-sm'}>*/}
+                            {/*    Отчет*/}
+                            {/*</Link>*/}
                             {/*<Link to={'#'} className={'self-center text-sm'}>*/}
                             {/*    Налоги*/}
                             {/*</Link>*/}

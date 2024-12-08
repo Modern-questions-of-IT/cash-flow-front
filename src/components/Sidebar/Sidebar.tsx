@@ -2,11 +2,11 @@ import {Link, useNavigate} from 'react-router-dom';
 import {BlueButton} from '../BlueButton/BlueButton.tsx';
 
 const items = [
-    {id: 1, title: 'Общий обзор', img: './summary.svg', link: '/general_overview'},
+    {id: 1, title: 'Общий обзор', img: './summary.svg', link: '/transactions/all'},
     {id: 2, title: 'Доходы', img: './payments.svg', link: '/transactions/income'},
     {id: 3, title: 'Регулярные доходы', img: './replay.svg', link: '/regular/income'},
-    {id: 4, title: 'Платежи', img: './payments.svg', link: '/transactions/outcome'},
-    {id: 5, title: 'Регулярные платежи', img: './replay.svg', link: '/regular/outcome'},
+    {id: 4, title: 'Расходы', img: './payments.svg', link: '/transactions/expense'},
+    {id: 5, title: 'Регулярные расходы', img: './replay.svg', link: '/regular/expense'},
 ]
 
 export const Sidebar = () => {

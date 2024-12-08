@@ -1,53 +1,62 @@
 import {BlueButton} from '../../components/BlueButton/BlueButton.tsx';
 import {useEffect, useState} from 'react';
 
-import InputMask from 'react-input-mask';
-import {useNavigate} from 'react-router-dom';
-
-interface DataType {
-    username: string,
-    name: string,
-    password: string
-}
-
-export const ProfileSettings = (user) => {
+export const ProfileSettings = (user: any) => {
     console.log(user)
-    const navigate = useNavigate()
 
-    const [data, setData] = useState<DataType>({
-        username: user.user.email,
-        name: user.user.name,
-        password: ''
-    })
+    const [email, _] = useState<string>(user.user.email)
     const [error, setError] = useState<string>('')
 
-    const handleChangeForm = (e: any) => {
-        setData({
-            ...data,
+    const [password, setPassword] = useState({
+        oldPassword: '',
+        newPassword: ''
+    })
+
+    const [name, setName] = useState<string>(user.user.name)
+
+    // useEffect(() => {
+    //     (async function () {
+    //         try {
+    //             const token = localStorage.getItem("authTokenCashFlow")
+    //             const response = await fetch(`http://195.133.197.53:8080/auth/info`, {
+    //                 method: "GET",
+    //                 credentials: "include",
+    //                 headers: { 'Content-Type': 'application/json',  "Authorization": `Bearer ${token}` },
+    //             })
+    //             let result = await response.json()
+    //             console.log(result)
+    //         } catch (error) {
+    //             console.log(error)
+    //         }
+    //     })()
+    // }, []);
+
+    const handleChangePassword = (e: any) => {
+        setPassword({
+            ...password,
             [e.target.name]: e.target.value
         })
-        console.log(data)
+        console.log(password)
     }
 
-    const handleSubmitForm = async (e: any) => {
+    const handleSubmitPassword = async (e: any) => {
         e.preventDefault();
-        setData({
-            ...data,
-            name: data.name.trim(),
-        })
+        // setData({
+        //     ...data,
+        //     name: data.name.trim(),
+        // })
 
-        console.log(data)
-
-        if (!data.name) {
-            setError('Заполните, пожалуйста, все поля')
-            return
-        }
+        // if (!data.name) {
+        //     setError('Заполните, пожалуйста, все поля')
+        //     return
+        // }
 
         try {
-            const result = await fetch('', {
-                method: "POST",
-                body: JSON.stringify(data),
-                headers: { 'Content-Type': 'application/json' },
+            const token = localStorage.getItem("authTokenCashFlow")
+            const result = await fetch('http://195.133.197.53:8080/auth/change-password', {
+                method: "PUT",
+                body: JSON.stringify(password),
+                headers: { 'Content-Type': 'application/json',  "Authorization": `Bearer ${token}` },
                 credentials: "include",
             })
 
@@ -62,30 +71,70 @@ export const ProfileSettings = (user) => {
         }
     }
 
+    const handleSubmitName = async (e: any) => {
+        e.preventDefault();
+        setName(name.trim())
+
+        if (!name) {
+            setError('Имя не должно быть пустым')
+            return
+        }
+
+        try {
+            const token = localStorage.getItem("authTokenCashFlow")
+            console.log(name)
+            const result = await fetch('http://195.133.197.53:8080/auth/change-username', {
+                method: "PUT",
+                body: JSON.stringify({ name: name}),
+                headers: { 'Content-Type': 'application/json',  "Authorization": `Bearer ${token}` },
+                credentials: "include",
+            })
+
+            const res = await result.json()
+
+            if (result.ok) {
+                window.alert("Изменения сохранены")
+                localStorage.setItem("authTokenCashFlow", res.token)
+                // setData({etransaction: '', name: ''})
+            } else {
+                alert("Ошибка, попробуйте еще раз")
+            }
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
     useEffect(() => {
-        if (data.name) {
+        if (name) {
             setError('')
         }
-    }, [data])
+    }, [name])
 
     return (
         <div className={'max-w-screen-xl w-full flex flex-col justify-start my-5 ml-32 gap-5'}>
-            <h2 className={'text-3xl'}>Добавление категории</h2>
+            <h2 className={'text-3xl'}>Настройки профиля</h2>
             <form className={'flex flex-col gap-5'}>
                 <label className={'flex flex-col gap-2'}>
                     <span>Username</span>
-                    <input disabled value={data.username} onChange={handleChangeForm}
+                    <input disabled value={email}
                            className={'border-gray-400 text-gray-500 bg-gray-200 border-[1px] rounded-lg h-12 w-96 px-3 transition duration-500 '}/>
                     <span>Имя</span>
-                    <input placeholder={'Введите имя'} name={'name'} value={data.name} onChange={handleChangeForm}
+                    <input placeholder={'Введите имя'} name={'name'} value={name}
+                           onChange={(e: any) => setName(e.target.value)}
                            className={'border-gray-400 border-[1px] rounded-lg h-12 w-96 px-3 transition duration-500 ' +
-                               (error && !data.name && 'border-red-500 ')}/>
+                               (error && !name && 'border-red-500 ')}/>
+                    <BlueButton text={'Сохранить имя'} classname={'w-96 h-12 mt-8 mb-10'}
+                                onClick={handleSubmitName}
+                    />
+                    <span>Старый пароль</span>
+                    <input placeholder={'Введите старый пароль'} name={'oldPassword'} value={password.oldPassword} onChange={handleChangePassword}
+                           className={'border-gray-400 border-[1px] rounded-lg h-12 w-96 px-3 transition duration-500 '}/>
                     <span>Новый пароль</span>
-                    <input placeholder={'Введите новый пароль'} name={'name'} value={data.password} onChange={handleChangeForm}
+                    <input placeholder={'Введите новый пароль'} name={'newPassword'} value={password.newPassword} onChange={handleChangePassword}
                            className={'border-gray-400 border-[1px] rounded-lg h-12 w-96 px-3 transition duration-500 '}/>
                 </label>
                 <div className={'h-3'}>{error}</div>
-                <BlueButton text={'Сохранить изменения'} classname={'w-96 h-12'} onClick={handleSubmitForm}/>
+                <BlueButton text={'Изменить пароль'} classname={'w-96 h-12'} onClick={handleSubmitPassword}/>
             </form>
         </div>
     )

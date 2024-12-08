@@ -1,23 +1,19 @@
-import {BlueButton} from '../../components/BlueButton/BlueButton.tsx';
 import {useEffect, useState} from 'react';
-import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import {useParams} from "react-router-dom";
 interface DataType {
+    id: number;
     createdAt: string;
     categoryName: string;
     title: string | null;
     amount: number;
-    etransaction: string
+    type: string;
+    nextOccurrence: string
 }
 
 export const RegularTransactions = (user: any) => {
     const [data, setData] = useState<DataType[]>([])
-
     const {type} = useParams()
-    // const [fromDate, setFromDate] = useState<Date | null>(null);
-    // const [toDate, setToDate] = useState<Date | null>(null);
-
 
     useEffect(() => {
         console.log(data)
@@ -28,7 +24,7 @@ export const RegularTransactions = (user: any) => {
         (async function() {
             try {
 
-                const response = await fetch("", {
+                const response = await fetch(`http://195.133.197.53:8080/regular_transaction/getAll/${user.user.id}`, {
                     method: "GET",
                     credentials: "include",
                     headers: {
@@ -47,35 +43,27 @@ export const RegularTransactions = (user: any) => {
         }())
     }, [])
 
-    // const handleFetchData = async () => {
-    //     const sendData = {
-    //         userId: user.user.id,
-    //         //@ts-ignore
-    //         fromDate: fromDate && (new Date(fromDate)).toISOString(),
-    //         //@ts-ignore
-    //         toDate: toDate && (new Date(toDate)).toISOString(),
-    //     }
-    //
-    //     console.log(sendData)
-    //     // console.log((new Date(startDate)).toISOString())
-    //     try {
-    //         const result = await fetch('http://195.133.197.53:8889/transaction/getByTime', {
-    //             method: "POST",
-    //             body: JSON.stringify(sendData),
-    //             headers: { 'Content-Type': 'application/json' },
-    //             credentials: "include",
-    //         })
-    //
-    //         if (result.ok) {
-    //             setData(await result.json())
-    //         }
-    //
-    //
-    //     } catch (e) {
-    //         console.log(e)
-    //     }
-    // }
+    const handleDelete = async (id: number) => {
+        try {
+            const token = localStorage.getItem("authTokenCashFlow")
+            const response = await fetch(`http://195.133.197.53:8080/regular_transaction/delete/${id}`, {
+                method: "DELETE",
+                credentials: "include",
+                headers: {
+                    'Content-Type': 'application/json',
+                    "Authorization": `Bearer ${token}`
+                },
+            })
 
+            if (response.ok) {
+                setData((prevData) => prevData.filter(item => item.id !== id));
+            } else {
+                alert("Ошибка, попробуйте еще раз")
+            }
+        } catch (e) {
+            console.log(e)
+        }
+    }
 
     return (
         <div className={'max-w-screen-xl mx-auto'}>
@@ -88,15 +76,17 @@ export const RegularTransactions = (user: any) => {
                         <td>Категория</td>
                         <td>Название</td>
                         <td>Сумма</td>
+                        <td></td>
                     </tr>
                     </thead>
                     <tbody>
-                    {data && data.map((item, index) => (
+                    {data && data.filter((item) => item.type === type?.toUpperCase()).map((item, index) => (
                         <tr key={index} className={"h-12"}>
-                            <td>{moment(item.createdAt).format('DD MMMM YYYY')}</td>
+                            <td>{moment(item.nextOccurrence).format('DD.MM.YYYY')}</td>
                             <td>{item.categoryName}</td>
                             <td>{item.title}</td>
-                            <td>{item.etransaction==="INCOME" ? <p>+{item.amount}</p> : <p>-{item.amount}</p>}</td>
+                            <td>{item.type==="INCOME" ? <p>+{item.amount}</p> : <p>-{item.amount}</p>}</td>
+                            <td><button onClick={() => handleDelete(item.id)}>Удалить</button></td>
                         </tr>
                     ))}
                     </tbody>

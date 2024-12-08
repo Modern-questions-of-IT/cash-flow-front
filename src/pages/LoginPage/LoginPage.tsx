@@ -1,6 +1,6 @@
 import {BlueButton} from '../../components/BlueButton/BlueButton.tsx';
 import {useEffect, useState} from 'react';
-import {Link, useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 
 interface DataType {
     email: string;
@@ -43,7 +43,7 @@ export const LoginPage = () => {
         if (response.ok) {
             const res = await response.json()
             console.log(res)
-            localStorage.setItem("authToken", res.token)
+            localStorage.setItem("authTokenCashFlow", res.token)
             navigate("/general_overview")
         } else {
             setError("Ошибка, попробуйте еще раз")

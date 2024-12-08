@@ -2,7 +2,6 @@ import {BlueButton} from '../../components/BlueButton/BlueButton.tsx';
 import {useEffect, useState} from 'react';
 
 import InputMask from 'react-input-mask';
-import {useNavigate} from 'react-router-dom';
 
 interface DataType {
     userId: number
@@ -12,7 +11,7 @@ interface DataType {
     title: string,
     categoryId: number | '',
     // paymentWay: string,
-    isRecurring: boolean,
+    // isRecurring: boolean,
     day?: number,
     month?: number,
     year?: number,
@@ -31,33 +30,33 @@ const toDateFormat = (date: string) => {
     return date.split('/').reverse().join('-') + 'T12:00:00.000Z'
 }
 
-export const NewPayment = (user) => {
-    const navigate = useNavigate()
+export const NewPayment = (user: any) => {
+    const [isRecurring, setIsRecurring] = useState<boolean>(false)
 
 
     const [data, setData] = useState<DataType>({
         userId: user.user.id,
-        isRecurring: false,
-        type: 'OUTCOME',
+        // isRecurring: false,
+        type: 'EXPENSE',
         categoryId: '',
         // paymentWay: 'Кредитная карта',
         title: '',
         amount: '',
         date: parseDate(new Date(Date.now()).toISOString())})
 
-    const [categories, setCategories] = useState<{id: number, title: string}[]>([{id: 1, title: "ssssss"}])
+    const [categories, setCategories] = useState<{id: number, name: string}[]>([])
     const [error, setError] = useState<string>('')
 
     useEffect(() => {
         (async function () {
-
             try {
-                const response = await fetch("", {
+                const response = await fetch(`http://195.133.197.53:8080/category/get/${user.user.id}/${data.type}`, {
                     method: "GET",
                     credentials: "include"
                 })
                 let result = await response.json()
                 setCategories(result)
+                console.log(result)
             } catch (error) {
                 console.log(error)
             }
@@ -85,9 +84,12 @@ export const NewPayment = (user) => {
             title: data.title.trim(),
             createdAt: new Date(Date.now()).toISOString(),
             updatedAt: new Date(Date.now()).toISOString(),
+            day: data.day ? data.day : 0,
+            month: data.month ? data.month : 0,
+            year: data.year ? data.year : 0
         };
 
-        if (!data.amount || !data.date || !data.categoryId || !data.title || (data.isRecurring && (data.day || data.month || data.year))) {
+        if (!data.amount || !data.date || !data.categoryId || !data.title || (isRecurring && !(data.day || data.month || data.year))) {
             setError('Заполните, пожалуйста, все поля')
             console.log(data)
             return
@@ -95,18 +97,24 @@ export const NewPayment = (user) => {
 
         updatedData.date = toDateFormat(updatedData.date);
 
+        console.log(updatedData)
+
+
         try {
-            const result = await fetch('http://195.133.197.53:8080/transaction/register_new', {
+            const url = isRecurring ? "http://195.133.197.53:8080/regular_transaction/register_new" : "http://195.133.197.53:8080/transaction/register_new"
+            const token = localStorage.getItem("authTokenCashFlow")
+            const result = await fetch(`${url}`, {
                 method: "POST",
                 body: JSON.stringify(updatedData),
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'application/json', "Authorization": `Bearer ${token}` },
                 credentials: "include",
             })
 
             if (result.ok) {
                 window.alert("Платеж записан")
-                setData({userId: user.user.id, isRecurring: false, type: "", categoryId: '', amount: '', title: '',
+                setData({userId: user.user.id, type: "EXPENSE", categoryId: '', amount: '', title: '',
                     date: parseDate(new Date(Date.now()).toISOString())})
+                setIsRecurring(false)
             } else {
                 setData({
                     ...data,
@@ -121,7 +129,7 @@ export const NewPayment = (user) => {
     }
 
     useEffect(() => {
-        if (data.amount && data.date && data.categoryId && data.title && (data.isRecurring && data.frequency)) {
+        if (data.amount && data.date && data.categoryId && data.title && (isRecurring && data.frequency)) {
             setError('')
         }
     }, [data])
@@ -132,11 +140,11 @@ export const NewPayment = (user) => {
             <form className={'flex flex-col gap-5'}>
                 <fieldset className={'flex gap-8'} onChange={handleChangeForm} name={'type'}>
                     <div className={'border-gray-400 border-[1px] rounded-lg h-12 w-44 px-3 flex gap-3 items-center transition duration-500 '}>
-                        <input defaultChecked type={'radio'} id={'OUTCOME'} className={'w-4 h-4'} name='type' value='OUTCOME'/>
-                        <label htmlFor={'OUTCOME'}>Расходы</label>
+                        <input defaultChecked type={'radio'} id={'EXPENSE'} className={'w-4 h-4'} checked={data.type === 'EXPENSE'} name='type' value='EXPENSE'/>
+                        <label htmlFor={'EXPENSE'}>Расходы</label>
                     </div>
                     <div className={'border-gray-400 border-[1px] rounded-lg h-12 w-44 px-3 flex gap-3 items-center transition duration-500 '}>
-                        <input type={'radio'} id={'INCOME'} className={'w-4 h-4'} name='type' value='INCOME'/>
+                        <input type={'radio'} id={'INCOME'} className={'w-4 h-4'} checked={data.type === 'INCOME'} name='type' value='INCOME'/>
                         <label htmlFor={'INCOME'}>Доходы</label>
                     </div>
                 </fieldset>
@@ -144,9 +152,9 @@ export const NewPayment = (user) => {
                     <span>Категория</span>
                     <select name={'categoryId'} value={data.categoryId} onChange={handleChangeForm}
                             className={'border-gray-400 border-[1px] rounded-lg h-12 w-96 px-3'}>
-                        <option defaultValue disabled/>
-                        {categories && categories.map((category) => (
-                            <option value={category.id}>{category.title}</option>
+                        <option disabled/>
+                        {categories.length > 0 && categories.map((category) => (
+                            <option value={category.id}>{category.name}</option>
                         ))}
                     </select>
                 </label>
@@ -188,16 +196,13 @@ export const NewPayment = (user) => {
                 {/*    </div>*/}
                 {/*</fieldset>*/}
                 <label className={'flex gap-4'}>
-                    <input type={'checkbox'} name={'isRecurring'} checked={data.isRecurring} onChange={() => {
-                        setData((prevState) => ({
-                            ...data,
-                            isRecurring: !prevState.isRecurring
-                        }))
+                    <input type={'checkbox'} name={'isRecurring'} checked={isRecurring} onChange={() => {
+                        setIsRecurring((prevState) => !prevState)
                     }}
                            className={'border-gray-400 border-[1px] rounded-lg h-6 w-6 px-3 transition duration-500 '}/>
                     <span>Сделать транзакцию регулярной</span>
                 </label>
-                {data.isRecurring && <label className={'flex flex-col gap-2'}>
+                {isRecurring && <label className={'flex flex-col gap-2'}>
                     <span>Частота</span>
                     <div className={"flex gap-4 "}>
                         <input placeholder={'Дни'} type={'number'} name={'day'} value={data.day} onChange={handleChangeForm}

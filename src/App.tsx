@@ -6,10 +6,10 @@ import {WelcomePage} from './pages/WelcomePage/WelcomePage.tsx';
 import {Sidebar} from './components/Sidebar/Sidebar.tsx';
 import {NewPayment} from './pages/NewPayment/NewPayment.tsx';
 import {LoginPage} from "./pages/LoginPage/LoginPage.tsx";
-import {ReportPage} from "./pages/ReportPage/ReportPage.tsx";
+// import {ReportPage} from "./pages/ReportPage/ReportPage.tsx";
 import {NewCategory} from "./pages/NewCategory/NewCategory.tsx";
 import {ProfileSettings} from "./pages/ProfileSettings/ProfileSettings.tsx";
-import {GeneralOverview} from "./pages/GeneralOverview/GeneralOverview.tsx";
+// import {GeneralOverview} from "./pages/GeneralOverview/GeneralOverview.tsx";
 import {useEffect, useState} from "react";
 import {RegularTransactions} from "./pages/RegularTransactions/RegularTransactions.tsx";
 import {Transactions} from "./pages/Transactions/Transactions.tsx";
@@ -17,10 +17,15 @@ import {Transactions} from "./pages/Transactions/Transactions.tsx";
 function App() {
 
   const [user, setUser] = useState()
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-      const token = localStorage.getItem("authToken")
-      setUser(parseJWT(token))
+      const token = localStorage.getItem("authTokenCashFlow")
+      if (token) {
+          const parsedUser = parseJWT(token);
+          setUser(parsedUser);
+      }
+      setLoading(false);
       console.log(user)
   }, []);
 
@@ -39,6 +44,10 @@ function App() {
       }
   }
 
+    if (loading) {
+        return null
+    }
+
   return (
     <>
       <Navbar user={user}/>
@@ -50,10 +59,10 @@ function App() {
                 <Route path={'/new_payment'} element={<NewPayment user={user}/>}/>
                 <Route path={'/new_category'} element={<NewCategory user={user} />}/>
                 <Route path={'/profile_settings'} element={<ProfileSettings user={user}/>}/>
-                <Route path={'/general_overview'} element={<GeneralOverview user={user}/>}/>
+                {/*<Route path={'/general_overview'} element={<GeneralOverview user={user}/>}/>*/}
                 <Route path={'/regular/:type'} element={<RegularTransactions user={user}/>}/>
                 <Route path={'/transactions/:type'} element={<Transactions user={user}/>}/>
-                <Route path={'/report'} element={<ReportPage user={user} />}/>
+                {/*<Route path={'/report'} element={<ReportPage user={user} />}/>*/}
             </Routes>
         </div>
     </>

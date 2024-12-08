@@ -1,21 +1,17 @@
 import {BlueButton} from '../../components/BlueButton/BlueButton.tsx';
 import {useEffect, useState} from 'react';
 
-import InputMask from 'react-input-mask';
-import {useNavigate} from 'react-router-dom';
-
 interface DataType {
     userId: number,
-    etransaction: string,
+    type: string,
     name: string,
 }
 
-export const NewCategory = (user) => {
-    const navigate = useNavigate()
+export const NewCategory = (user: any) => {
 
     const [data, setData] = useState<DataType>({
         userId: user.user.id,
-        etransaction: 'OUTCOME',
+        type: 'EXPENSE',
         name: ''})
     const [error, setError] = useState<string>('')
 
@@ -50,8 +46,8 @@ export const NewCategory = (user) => {
             })
 
             if (result.ok) {
-                window.alert("Платеж записан")
-                setData({userId: user.user.id, etransaction: '', name: ''})
+                window.alert("Категория записана")
+                setData({userId: user.user.id, type: 'EXPENSE', name: ''})
             } else {
                 alert("Ошибка, попробуйте еще раз")
             }
@@ -70,13 +66,13 @@ export const NewCategory = (user) => {
         <div className={'max-w-screen-xl w-full flex flex-col justify-start my-5 ml-32 gap-5'}>
             <h2 className={'text-3xl'}>Добавление категории</h2>
             <form className={'flex flex-col gap-5'}>
-                <fieldset className={'flex gap-8'} onChange={handleChangeForm} name={'etransaction'}>
+                <fieldset className={'flex gap-8'} onChange={handleChangeForm} name={'type'}>
                     <div className={'border-gray-400 border-[1px] rounded-lg h-12 w-44 px-3 flex gap-3 items-center transition duration-500 '}>
-                        <input defaultChecked type={'radio'} id={'OUTCOME'} className={'w-4 h-4'} name='etransaction' value='OUTCOME'/>
-                        <label htmlFor={'OUTCOME'}>Расходы</label>
+                        <input defaultChecked type={'radio'} id={'EXPENSE'} className={'w-4 h-4'} checked={data.type === 'EXPENSE'} name='type' value='EXPENSE'/>
+                        <label htmlFor={'EXPENSE'}>Расходы</label>
                     </div>
                     <div className={'border-gray-400 border-[1px] rounded-lg h-12 w-44 px-3 flex gap-3 items-center transition duration-500 '}>
-                        <input type={'radio'} id={'INCOME'} className={'w-4 h-4'} name='etransaction' value='INCOME'/>
+                        <input type={'radio'} id={'INCOME'} className={'w-4 h-4'} checked={data.type === 'INCOME'} name='type' value='INCOME'/>
                         <label htmlFor={'INCOME'}>Доходы</label>
                     </div>
                 </fieldset>

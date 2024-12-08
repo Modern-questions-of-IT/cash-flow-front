@@ -19,7 +19,8 @@ function App() {
   const [user, setUser] = useState()
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+
+    useEffect(() => {
       const token = localStorage.getItem("authTokenCashFlow")
       if (token) {
           const parsedUser = parseJWT(token);
@@ -52,7 +53,7 @@ function App() {
     <>
       <Navbar user={user}/>
         <div className={'flex justify-between max-w-screen-xl mx-auto'}>
-            {user && <Sidebar/>}
+            {user && <Sidebar />}
             <Routes>
                 <Route path={'/registration'} element={<WelcomePage />}/>
                 <Route path={'/login'} element={<LoginPage />}/>

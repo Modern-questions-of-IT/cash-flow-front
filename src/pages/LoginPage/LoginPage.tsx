@@ -44,7 +44,8 @@ export const LoginPage = () => {
             const res = await response.json()
             console.log(res)
             localStorage.setItem("authTokenCashFlow", res.token)
-            navigate("/general_overview")
+            navigate("/transactions/all")
+            window.location.reload();
         } else {
             setError("Ошибка, попробуйте еще раз")
         }
